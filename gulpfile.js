@@ -1,14 +1,15 @@
 'use strict';
  
-var gulp = require('gulp');
-var sass = require('gulp-sass');
-var autoprefixer = require('gulp-autoprefixer');
-var concat = require('gulp-concat');
-var babel = require('gulp-babel');
-var uglify = require('gulp-uglify');
-var sourcemaps = require('gulp-sourcemaps');
-var uglifyCSS = require('gulp-uglifycss');
-var livereload = require('gulp-livereload');
+var gulp = require('gulp'),
+    sass = require('gulp-sass'),
+    autoprefixer = require('gulp-autoprefixer'),
+    concat = require('gulp-concat'),
+    babel = require('gulp-babel'),
+    uglify = require('gulp-uglify'),
+    sourcemaps = require('gulp-sourcemaps'),
+    uglifyCSS = require('gulp-uglifycss'),
+    livereload = require('gulp-livereload'),
+    useref = require('gulp-useref');
 
 gulp.task('styles:dev', function () {
   return gulp.src('src/css/sass/**/*.scss', {base: './'})
@@ -46,6 +47,17 @@ gulp.task('js:prod', function () {
     .pipe(uglify())
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('copy', function() {
+	return gulp.src([
+    'src/**/*.{php}',
+    'src/img/**/*.{jpg,png,svg,gif,webp,ico}',
+    'src/fonts/*.{woff,woff2,ttf,otf,eot,svg}'
+		], {
+			base: './'
+		})
+		.pipe(gulp.dest('dist'));
 });
 
 gulp.task('watch', function () {
