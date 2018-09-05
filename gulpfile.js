@@ -29,6 +29,13 @@ gulp.task('styles:prod', function () {
     .pipe(gulp.dest('./src'));
 });
 
+gulp.task('js:dev', function() {
+  return gulp.src('src/js/**/*.js', {base: './'})
+    .pipe(concat('app.js'))
+    .pipe(gulp.dest('./'))
+    .pipe(livereload());
+});
+
 gulp.task('js:prod', function () {
   return gulp.src('src/js/**/*.js', {base: './'})
     .pipe(sourcemaps.init())
@@ -43,9 +50,14 @@ gulp.task('js:prod', function () {
 
 gulp.task('watch', function () {
   livereload.listen();
-  gulp.watch('./src/css/sass/**/*.scss', ['styles:dev']);
+  gulp.watch('./src/css/sass/**/*.scss', ['styles:dev']).on('change', function( file ) {
+		livereload.changed(file.path);
+	});
+  gulp.watch('./src/js/**/*.js', ['js:dev']).on('change', function( file ) {
+		livereload.changed(file.path);
+	});
 });
 
 gulp.task('default', ['watch']);
 
-gulp.task('build', ['styles:prod']);
+gulp.task('build', ['styles:prod', 'js:prod']);
