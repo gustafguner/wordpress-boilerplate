@@ -9,7 +9,8 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     uglifyCSS = require('gulp-uglifycss'),
     livereload = require('gulp-livereload'),
-    useref = require('gulp-useref');
+    useref = require('gulp-useref'),
+    clean = require('gulp-clean');
 
 gulp.task('styles:dev', function () {
   return gulp.src('src/css/sass/**/*.scss', {base: './'})
@@ -43,19 +44,24 @@ gulp.task('js:prod', function () {
     .pipe(babel({
       presets: ['@babel/env']
     }))
-    .pipe(concat('app.js'))
+    .pipe(concat('scripts.bundle.js'))
     .pipe(uglify())
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('./dist'));
 });
 
+gulp.task('clean', function() {
+  return gulp.src('dist', {base: './'})
+    .pipe(clean());
+});
+
 gulp.task('copy', function() {
 	return gulp.src([
-    'src/**/*.{php}',
+    'src/**/*.php',
     'src/img/**/*.{jpg,png,svg,gif,webp,ico}',
     'src/fonts/*.{woff,woff2,ttf,otf,eot,svg}'
 		], {
-			base: './'
+			base: './src'
 		})
 		.pipe(gulp.dest('dist'));
 });
