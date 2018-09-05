@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*!
  * Theme Name: wordpress-boilerplate
  * Theme URI: 
@@ -8,8 +9,6 @@
  *
  * License: MIT
  */
-
 body {
   color: black;
-  background: red;
-}
+  background: red; }
