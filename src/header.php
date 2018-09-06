@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="<?php echo esc_url( get_template_directory_uri() ); ?>/style.css" />    
     
     <?php wp_head(); ?>
+    
   </head>
   <body>
     <header></header>

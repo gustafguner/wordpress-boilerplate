@@ -16,8 +16,7 @@ gulp.task('styles:dev', function () {
   return gulp.src('src/css/sass/**/*.scss', {base: './'})
     .pipe(sass())
     .pipe(concat('style.css'))
-    .pipe(gulp.dest('./src'))
-    .pipe(livereload());
+    .pipe(gulp.dest('./src'));
 });
 
 gulp.task('styles:prod', function () {
@@ -28,18 +27,11 @@ gulp.task('styles:prod', function () {
     }))
     .pipe(concat('style.css'))
     .pipe(uglifyCSS())
-    .pipe(gulp.dest('./src'));
-});
-
-gulp.task('js:dev', function() {
-  return gulp.src('src/js/**/*.js', {base: './'})
-    .pipe(concat('app.js'))
-    .pipe(gulp.dest('./'))
-    .pipe(livereload());
+    .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('js:prod', function () {
-  return gulp.src('src/js/**/*.js', {base: './'})
+  return gulp.src(['node_modules/jquery/dist/jquery.js', 'src/js/**/*.js'], {base: './'})
     .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/env']
@@ -47,8 +39,15 @@ gulp.task('js:prod', function () {
     .pipe(concat('scripts.bundle.js'))
     .pipe(uglify())
     .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest('./dist'));
+    .pipe(gulp.dest('./dist/js'));
 });
+
+//gulp.task('uglifyJS', function() {
+//  return gulp.src(['node_modules/jquery/dist/jquery.js', './src/js/**/*.js'])
+//		.pipe(concat('scripts.bundle.js'))
+//		.pipe(uglify())
+//		.pipe(gulp.dest('dist/js'));
+//});
 
 gulp.task('clean', function() {
   return gulp.src('dist', {base: './'})
@@ -74,17 +73,23 @@ gulp.task('jquery', function () {
     .pipe(gulp.dest('src/js/lib'));
 });
 
-
-gulp.task('watch', function () {
+gulp.task('watch', ['jquery'], function () {
   livereload.listen();
-  gulp.watch('./src/css/sass/**/*.scss', ['styles:dev']).on('change', function( file ) {
-		livereload.changed(file.path);
-	});
-  gulp.watch('./src/js/**/*.js', ['js:dev']).on('change', function( file ) {
-		livereload.changed(file.path);
-	});
+
+  gulp.watch(
+    ['./src/css/sass/**/*.scss', 
+    './src/js/**/*.js',
+    './src/**/*.php']
+  ).on('change', function(file) {
+    livereload.changed(file.path);
+  });
+
+  gulp.watch('./src/css/sass/**/*.scss', ['styles:dev']);
 });
 
-gulp.task('default', ['jquery', 'watch']);
+gulp.task('default', ['watch']);
 
-gulp.task('build', ['clean', 'jquery', 'copy', 'styles:prod', 'js:prod']);
+gulp.task('build', ['clean'], function () {
+  gulp.start(['copy', 'styles:prod', 'js:prod']);
+});
+
