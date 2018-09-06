@@ -42,13 +42,6 @@ gulp.task('js:prod', function () {
     .pipe(gulp.dest('./dist/js'));
 });
 
-//gulp.task('uglifyJS', function() {
-//  return gulp.src(['node_modules/jquery/dist/jquery.js', './src/js/**/*.js'])
-//		.pipe(concat('scripts.bundle.js'))
-//		.pipe(uglify())
-//		.pipe(gulp.dest('dist/js'));
-//});
-
 gulp.task('clean', function() {
   return gulp.src('dist', {base: './'})
     .pipe(clean());
