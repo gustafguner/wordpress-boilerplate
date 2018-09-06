@@ -1,3 +1,3 @@
-"use strict";
-
-console.log(12221);
+$(document).ready(function() {
+  console.log('jQuery is working');
+});
