@@ -1,4 +1,6 @@
 'use strict';
+
+var env = "development";
  
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
@@ -9,8 +11,8 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     uglifyCSS = require('gulp-uglifycss'),
     livereload = require('gulp-livereload'),
-    useref = require('gulp-useref'),
-    clean = require('gulp-clean');
+    clean = require('gulp-clean'),
+    template = require('gulp-template');
 
 gulp.task('styles:dev', function () {
   return gulp.src('src/css/sass/**/*.scss', {base: './'})
@@ -52,9 +54,7 @@ gulp.task('copy', function() {
     'src/**/*.php',
     'src/img/**/*.{jpg,png,svg,gif,webp,ico}',
     'src/fonts/*.{woff,woff2,ttf,otf,eot,svg}'
-		], {
-			base: './src'
-		})
+		], {base: './src'})
 		.pipe(gulp.dest('dist'));
 });
 
@@ -80,9 +80,29 @@ gulp.task('watch', ['jquery'], function () {
   gulp.watch('./src/css/sass/**/*.scss', ['styles:dev']);
 });
 
-gulp.task('default', ['watch']);
+gulp.task('production-env', function () {
+  env = "production";
+});
 
-gulp.task('build', ['clean'], function () {
+gulp.task('development-env', function () {
+  env = "development";
+});
+
+gulp.task('set-template-env', function() {
+  const isProduction = (env === "production");
+  console.log(isProduction);
+
+  return gulp.src('./src/dev_templates/env.php', {base: './src/dev_templates'})
+    .pipe(template({isProduction: isProduction}))
+    .pipe(gulp.dest('./src/config'));
+});
+
+gulp.task('default', ['development-env', 'set-template-env'], function() {
+  gulp.start(['watch']);
+});
+
+
+gulp.task('build', ['production-env', 'set-template-env'], function () {
   gulp.start(['copy', 'styles:prod', 'js:prod']);
 });
 
