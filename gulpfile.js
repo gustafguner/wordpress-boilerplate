@@ -90,7 +90,6 @@ gulp.task('development-env', function () {
 
 gulp.task('set-template-env', function() {
   const isProduction = (env === "production");
-  console.log(isProduction);
 
   return gulp.src('./src/dev_templates/env.php', {base: './src/dev_templates'})
     .pipe(template({isProduction: isProduction}))
