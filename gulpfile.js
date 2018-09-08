@@ -91,16 +91,6 @@ gulp.task('development-env', function () {
   env = "development";
 });
 
-/*
-gulp.task('set-template-env', function() {
-  const isProduction = (env === "production");
-
-  return gulp.src('./src/dev_templates/env.php', {base: './src/dev_templates'})
-    .pipe(template({isProduction: isProduction}))
-    .pipe(gulp.dest('./src/config'));
-});
-*/
-
 gulp.task('prod-config', function() {
   gulp.src('./src/prod_config/**/*.php', {base: './src/prod_config'})
     .pipe(gulp.dest('./dist/config'));
