@@ -1,1 +1,0 @@
-<?php define('IS_PRODUCTION', <%= isProduction %>); ?>

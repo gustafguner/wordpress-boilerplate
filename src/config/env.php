@@ -1,1 +1,1 @@
-<?php define('IS_PRODUCTION', true); ?>
+<?php define('IS_PRODUCTION', false); ?>

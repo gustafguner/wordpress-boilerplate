@@ -49,10 +49,11 @@ gulp.task('clean', function() {
     .pipe(clean());
 });
 
-// TODO: Don't copy dev_templates
 gulp.task('copy', function() {
 	return gulp.src([
     '!src/dev_templates/*.php', 
+    '!src/prod_config/*.php', 
+    '!src/config/*.php', 
     'src/**/*.php',
     'src/img/**/*.{jpg,png,svg,gif,webp,ico}',
     'src/fonts/*.{woff,woff2,ttf,otf,eot,svg}'
@@ -90,6 +91,7 @@ gulp.task('development-env', function () {
   env = "development";
 });
 
+/*
 gulp.task('set-template-env', function() {
   const isProduction = (env === "production");
 
@@ -97,13 +99,20 @@ gulp.task('set-template-env', function() {
     .pipe(template({isProduction: isProduction}))
     .pipe(gulp.dest('./src/config'));
 });
+*/
 
-gulp.task('default', ['development-env', 'set-template-env'], function() {
+gulp.task('prod-config', function() {
+  gulp.src('./src/prod_config/**/*.php', {base: './src/prod_config'})
+    .pipe(gulp.dest('./dist/config'));
+});
+
+
+gulp.task('default', ['development-env'], function() {
   gulp.start(['watch']);
 });
 
 
-gulp.task('build', ['production-env', 'set-template-env'], function () {
-  gulp.start(['copy', 'styles:prod', 'js:prod']);
+gulp.task('build', ['production-env', 'clean'], function () {
+  gulp.start(['copy', 'prod-config', 'styles:prod', 'js:prod']);
 });
 
