@@ -49,8 +49,10 @@ gulp.task('clean', function() {
     .pipe(clean());
 });
 
+// TODO: Don't copy dev_templates
 gulp.task('copy', function() {
 	return gulp.src([
+    '!src/dev_templates/*.php', 
     'src/**/*.php',
     'src/img/**/*.{jpg,png,svg,gif,webp,ico}',
     'src/fonts/*.{woff,woff2,ttf,otf,eot,svg}'
